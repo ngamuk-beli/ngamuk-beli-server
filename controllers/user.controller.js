@@ -59,6 +59,24 @@ class Controller {
       next(err);
     }
   }
+
+  static async user_by_id(req, res, next) {
+    try {
+      const { id } = req.params;
+      const user = await User.findOne({
+        where: { id },
+        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt"] } }],
+        attributes: { exclude: ["id", "password", "createdAt", "updatedAt"] },
+      });
+      if (!user) {
+        throw { name: "NotFound" };
+      }
+      console.log(user);
+      res.status(200).json({ data: user });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = Controller;
