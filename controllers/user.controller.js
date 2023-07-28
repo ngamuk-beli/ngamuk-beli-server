@@ -1,6 +1,6 @@
 const { comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { User } = require("../models");
+const { User, Address } = require("../models");
 
 class Controller {
   static async register(req, res, next) {
@@ -37,6 +37,24 @@ class Controller {
         access_token: token,
         email: user.email,
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async address(req, res, next) {
+    try {
+      const { id } = req.user;
+      const { title, province, city, district, zipcode } = req.body;
+      const user_address = await Address.create({
+        title,
+        province,
+        city,
+        district,
+        zipcode,
+        user_id: +id,
+      });
+      res.status(201).json({ message: `user with id ${id} succesfully added address` });
     } catch (err) {
       next(err);
     }
