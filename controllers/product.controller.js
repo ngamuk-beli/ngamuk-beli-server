@@ -1,10 +1,18 @@
-const { Product } = require("../models")
+const { Product, Category, Product_category, sequelize } = require("../models")
 
 class ProductController {
     static async create_product(req, res, next) {
+        const t = await sequelize.transaction()
         try {
-            const { name, description, slug, price, sku, quantity, keyword, weight, brand_id, sub_brand, } = req.body
-
+            const { name, description, slug, price, sku, quantity, keyword, weight, brand_id, sub_brand, category } = req.body
+            
+            const [foundCategory, created] =  await Category.findOrCreate({
+                where: { name: category },
+                default: {
+                    name : category
+                }
+            })
+            
             const newProduct = await Product.create({
                 name,
                 description,
@@ -16,12 +24,19 @@ class ProductController {
                 weight,
                 brand_id,
                 sub_brand
-            })
+            },{ transaction: t})
+            
+            
+            const productCategory = await Product_category.create({
+                product_id: newProduct.id,
+                category_id: foundCategory.id
+            }, { transaction: t})
 
             res.status(200).json({message: "Product created!"})
-
+            await t.commit()
         } catch (err) {
             next(err)
+            await t.rollback()
         }
     }
     static async update_product(req, res, next) {
