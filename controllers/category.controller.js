@@ -32,7 +32,7 @@ class CategoryController {
             const { id } = req.body
 
             const findCategory = await Category.destroy({where: {id}})
-            res.status(200).json({message:"Category deleted"})
+            res.status(200).json({message:"Category is deleted"})
         } catch (err) {
             next(err)
         }
