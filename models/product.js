@@ -91,7 +91,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       brand_id: DataTypes.INTEGER,
       sub_brand_id: DataTypes.INTEGER,
-      banner_id: DataTypes.INTEGER,
     },
     {
       sequelize,
