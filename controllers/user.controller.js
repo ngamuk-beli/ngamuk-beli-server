@@ -42,37 +42,59 @@ class Controller {
     }
   }
 
-  static async address(req, res, next) {
-    try {
-      const { id } = req.user;
-      const { title, province, city, district, zipcode } = req.body;
-      const user_address = await Address.create({
-        title,
-        province,
-        city,
-        district,
-        zipcode,
-        user_id: +id,
-      });
-      res.status(201).json({ message: `user with id ${id} succesfully added address` });
-    } catch (err) {
-      next(err);
-    }
-  }
-
+  // get user by id
   static async user_by_id(req, res, next) {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
       const user = await User.findOne({
         where: { id },
-        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt"] } }],
+        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt", "user_id"] } }],
         attributes: { exclude: ["id", "password", "createdAt", "updatedAt"] },
       });
       if (!user) {
         throw { name: "NotFound" };
       }
-      console.log(user);
+
       res.status(200).json({ data: user });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  // edit user by id
+  static async edit_user(req, res, next) {
+    try {
+      const { id } = req.user;
+
+      const { username, email, password, phone_number } = req.body;
+
+      const edit_user = await User.update(
+        {
+          username,
+          email,
+          password,
+          phone_number,
+        },
+        { where: { id }, individualHooks: true },
+        
+      );  
+
+      res.status(200).json({ message: `user with ${id} successfully edited` });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  //delete w/ address
+  static async delete_user(req, res, next) {
+    try {
+      const { id } = req.user;
+      const user = await User.findByPk({ where: id });
+      if (!user) {
+        throw { name: "NotFound" };
+      }
+      User.destroy(id);
+      res.status(200).json({ message: `user with ${id}` });
     } catch (err) {
       next(err);
     }
