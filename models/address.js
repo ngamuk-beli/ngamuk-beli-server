@@ -64,6 +64,20 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
     },
     {
+      hooks: {
+        beforeCreate(address, option) {
+          address.title = address.title.toLowerCase();
+          address.province = address.province.toLowerCase();
+          address.city = address.city.toLowerCase();
+          address.district = address.district.toLowerCase();
+        },
+        beforeUpdate(address, option) {
+          address.title = address.title.toLowerCase();
+          address.province = address.province.toLowerCase();
+          address.city = address.city.toLowerCase();
+          address.district = address.district.toLowerCase();
+        },
+      },
       sequelize,
       modelName: "Address",
     }

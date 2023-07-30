@@ -64,7 +64,7 @@ class Controller {
   // edit user by id
   static async edit_user(req, res, next) {
     try {
-      console.log(req.user);
+      // console.log(req.user);
       const { id } = req.user;
 
       const { username, email, password, phone_number } = req.body;
