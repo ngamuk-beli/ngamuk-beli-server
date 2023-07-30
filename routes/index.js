@@ -6,6 +6,7 @@ const user = require("./user");
 const address = require("./address");
 const product = require("./product")
 const category = require("./category")
+const brand = require("./brand")
 const auth = require("../middlewares/authentication");
 
 router.post("/api/admin/login", admin_controller.login);
@@ -13,6 +14,7 @@ router.post("/register", user_controller.register);
 router.post("/login", user_controller.user_login);
 router.use("/api/product", product)
 router.use("/api/category", category)
+router.use("/api/brand", brand)
 
 router.use(auth);
 router.use("/api/user", user);
