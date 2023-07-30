@@ -75,8 +75,9 @@ class Controller {
           password,
           phone_number,
         },
-        { where: { id } }
-      );
+        { where: { id }, individualHooks: true },
+        
+      );  
 
       res.status(200).json({ message: `user with ${id} successfully edited` });
     } catch (err) {
