@@ -18,7 +18,7 @@ class ProductController {
                 sub_brand
             })
 
-            res.status(200).json(newProduct)
+            res.status(200).json({message: "Product created!"})
 
         } catch (err) {
             next(err)
