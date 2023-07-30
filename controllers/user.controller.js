@@ -48,13 +48,13 @@ class Controller {
       const { id } = req.user;
       const user = await User.findOne({
         where: { id },
-        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt"] } }],
+        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt", "user_id"] } }],
         attributes: { exclude: ["id", "password", "createdAt", "updatedAt"] },
       });
       if (!user) {
         throw { name: "NotFound" };
       }
-      // console.log(user);
+
       res.status(200).json({ data: user });
     } catch (err) {
       next(err);
@@ -64,22 +64,21 @@ class Controller {
   // edit user by id
   static async edit_user(req, res, next) {
     try {
-      // console.log(req.user);
       const { id } = req.user;
 
       const { username, email, password, phone_number } = req.body;
 
       const edit_user = await User.update(
-        { where: { id } },
         {
           username,
           email,
           password,
           phone_number,
-        }
+        },
+        { where: { id } }
       );
 
-      res.status(200).json({ data: edit_user });
+      res.status(200).json({ message: `user with ${id} successfully edited` });
     } catch (err) {
       next(err);
     }
