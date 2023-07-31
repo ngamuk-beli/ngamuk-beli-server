@@ -28,6 +28,9 @@ const errorHandler = (err, req, res, next) => {
     case "ProductNotFound":
       res.status(404).json({ statusCode: 404, message: "Product not found" });
       break;
+    case "BannerNotFound":
+      res.status(404).json({ statusCode: 404, message: "Banner not found" });
+      break;
     default:
       res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
       break;
