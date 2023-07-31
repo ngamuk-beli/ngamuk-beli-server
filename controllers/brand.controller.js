@@ -46,12 +46,24 @@ class BrandController {
     }
   }
 
-  static async get_brand(req, res, next) {
+  static async get_brands(req, res, next) {
     try {
-      const all_brand = Brand.findAll();
-      res.status(200).json({ list_brand: all_brand });
+      const brands = await Brand.findAll()
+      res.status(200).json(brands)
     } catch (err) {
       next(err);
+    }
+  }
+
+  static async get_brand (req,res,next) {
+    try {
+      const { id } = req.body
+      const brand = await Brand.findOne({
+        where: { id }
+      })
+      res.status(200).json(brand)
+    } catch (err) {
+      next(err)
     }
   }
 }
