@@ -75,9 +75,8 @@ class Controller {
           password,
           phone_number,
         },
-        { where: { id }, individualHooks: true },
-        
-      );  
+        { where: { id }, individualHooks: true }
+      );
 
       res.status(200).json({ message: `user with ${id} successfully edited` });
     } catch (err) {
@@ -89,11 +88,10 @@ class Controller {
   static async delete_user(req, res, next) {
     try {
       const { id } = req.user;
-      const user = await User.findByPk({ where: id });
+      const user = await User.destroy({ where: { id } });
       if (!user) {
         throw { name: "NotFound" };
       }
-      User.destroy(id);
       res.status(200).json({ message: `user with ${id}` });
     } catch (err) {
       next(err);
