@@ -97,7 +97,7 @@ class ProductController {
         { transaction: t }
       );
 
-      res.status(200).json({ message: "Product Updated!" });
+      res.status(200).json({ message: "Product is Updated!" });
       await t.commit();
     } catch (err) {
       next(err);
