@@ -6,6 +6,8 @@ const user = require("./user");
 const address = require("./address");
 const product = require("./product");
 const category = require("./category");
+const sub_brand = require("./sub_brand");
+const brand = require("./brand");
 const variant = require("./variant");
 const auth = require("../middlewares/authentication");
 
@@ -14,6 +16,8 @@ router.post("/register", user_controller.register);
 router.post("/login", user_controller.user_login);
 router.use("/api/product", product);
 router.use("/api/category", category);
+router.use("/api/brand", brand);
+router.use("/api/sub-brand", sub_brand);
 router.use("/api/variant", variant);
 
 router.use(auth);
