@@ -9,6 +9,7 @@ const category = require("./category");
 const sub_brand = require("./sub_brand");
 const brand = require("./brand");
 const variant = require("./variant");
+const discount = require("./discount")
 const auth = require("../middlewares/authentication");
 
 router.post("/api/admin/login", admin_controller.login);
@@ -19,6 +20,7 @@ router.use("/api/category", category);
 router.use("/api/brand", brand);
 router.use("/api/sub-brand", sub_brand);
 router.use("/api/variant", variant);
+router.use("/api/discount", discount)
 
 router.use(auth);
 router.use("/api/user", user);
