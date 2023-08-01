@@ -1,6 +1,6 @@
 const { comparePassword } = require("../helpers/bcrypt");
 const { generateToken } = require("../helpers/jwt");
-const { User, Address } = require("../models");
+const { User, Address, Order } = require("../models");
 
 class Controller {
   static async register(req, res, next) {
@@ -48,7 +48,7 @@ class Controller {
       const { id } = req.user;
       const user = await User.findOne({
         where: { id },
-        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt", "user_id"] } }],
+        include: [{ model: Address, attributes: { exclude: ["id", "createdAt", "updatedAt", "user_id"] } }, { model: Order }],
         attributes: { exclude: ["id", "password", "createdAt", "updatedAt"] },
       });
       if (!user) {
