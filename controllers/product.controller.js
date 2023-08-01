@@ -17,10 +17,6 @@ class ProductController {
         where: { id: banner_id}
       })
 
-      if(!foundBanner) {
-        throw { name: "BannerNotFound"}
-      }
-
       const newProduct = await Product.create(
         {
           name,
