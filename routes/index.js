@@ -21,6 +21,7 @@ router.use("/api/brand", brand);
 router.use("/api/sub-brand", sub_brand);
 router.use("/api/variant", variant);
 router.use("/api/banner", banner);
+router.use("/api/discount", discount)
 
 router.use(auth);
 router.use("/api/user", user);
