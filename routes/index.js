@@ -10,6 +10,7 @@ const sub_brand = require("./sub_brand");
 const brand = require("./brand");
 const variant = require("./variant");
 const banner = require("./banner");
+const discount = require("./discount")
 const auth = require("../middlewares/authentication");
 
 router.post("/api/admin/login", admin_controller.login);
