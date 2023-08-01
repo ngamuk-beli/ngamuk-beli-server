@@ -10,9 +10,11 @@ const sub_brand = require("./sub_brand");
 const brand = require("./brand");
 const variant = require("./variant");
 const banner = require("./banner");
-const discount = require("./discount")
+const discount = require("./discount");
+const product_gallery = require("./product_gallery");
 const auth = require("../middlewares/authentication");
 
+router.use("/assets", express.static("assets"));
 router.post("/api/admin/login", admin_controller.login);
 router.post("/register", user_controller.register);
 router.post("/login", user_controller.user_login);
@@ -22,7 +24,8 @@ router.use("/api/brand", brand);
 router.use("/api/sub-brand", sub_brand);
 router.use("/api/variant", variant);
 router.use("/api/banner", banner);
-router.use("/api/discount", discount)
+router.use("/api/discount", discount);
+router.use("/api/product-gallery", product_gallery);
 
 router.use(auth);
 router.use("/api/user", user);

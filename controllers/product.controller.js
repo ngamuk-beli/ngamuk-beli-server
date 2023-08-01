@@ -1,4 +1,4 @@
-const { Product, Category, Product_category, sequelize, Variant, Banner_product, Banner } = require("../models");
+const { Product, Category, Product_category, sequelize, Variant, Product_gallery, Banner_product, Banner } = require("../models");
 
 class ProductController {
   static async create_product(req, res, next) {
@@ -14,8 +14,8 @@ class ProductController {
       });
 
       const foundBanner = await Banner.findOne({
-        where: { id: banner_id}
-      })
+        where: { id: banner_id },
+      });
 
       const newProduct = await Product.create(
         {
@@ -28,15 +28,18 @@ class ProductController {
           keyword,
           weight,
           brand_id,
-          sub_brand_id
+          sub_brand_id,
         },
         { transaction: t }
-        );
-        
-      const newProductBanner = await Banner_product.create({
+      );
+
+      const newProductBanner = await Banner_product.create(
+        {
           product_id: newProduct.id,
-          banner_id: foundBanner.id
-        }, { transaction: t })
+          banner_id: foundBanner.id,
+        },
+        { transaction: t }
+      );
 
       const productCategory = await Product_category.create(
         {
@@ -57,7 +60,7 @@ class ProductController {
   static async update_product(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const { id, name, description, slug, price, sku, quantity, keyword, weight, brand_id, sub_brand_id, category_id , banner_id } = req.body;
+      const { id, name, description, slug, price, sku, quantity, keyword, weight, brand_id, sub_brand_id, category_id, banner_id } = req.body;
 
       const updatedProduct = await Product.update(
         {
@@ -76,19 +79,24 @@ class ProductController {
         { transaction: t }
       );
 
-      const newProductBanner = await Banner_product.update({
-        product_id: id,
-        banner_id: banner_id
-      },{
-        where: { product_id: id }
-      }, { transaction: t })
+      const newProductBanner = await Banner_product.update(
+        {
+          product_id: id,
+          banner_id: banner_id,
+        },
+        {
+          where: { product_id: id },
+        },
+        { transaction: t }
+      );
 
       const productCategory = await Product_category.update(
         {
           product_id: id,
           category_id: category_id,
-        }, {
-          where: { product_id: id}
+        },
+        {
+          where: { product_id: id },
         },
         { transaction: t }
       );
@@ -114,7 +122,10 @@ class ProductController {
   static async get_all_product(req, res, next) {
     try {
       const products = await Product.findAll({
-        include: [{ model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } }],
+        include: [
+          { model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } },
+          { model: Product_gallery, attributes: { exclude: ["createdAt", "updatedAt"] } },
+        ],
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
 
