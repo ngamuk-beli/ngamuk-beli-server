@@ -12,7 +12,10 @@ const variant = require("./variant");
 const banner = require("./banner");
 const discount = require("./discount");
 const product_gallery = require("./product_gallery");
+const order = require("./order");
 const auth = require("../middlewares/authentication");
+const authorizedOrder = require("../middlewares/authorizedOrder");
+const authorizedAddress = require("../middlewares/authorizedAddress");
 
 router.use("/assets", express.static("assets"));
 router.post("/api/admin/login", admin_controller.login);
@@ -29,6 +32,7 @@ router.use("/api/product-gallery", product_gallery);
 
 router.use(auth);
 router.use("/api/user", user);
-router.use("/api/address", address);
+router.use("/api/address", authorizedAddress, address);
+router.use("/api/order", authorizedOrder, order);
 
 module.exports = router;
