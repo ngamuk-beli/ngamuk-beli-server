@@ -1,4 +1,4 @@
-const { Product, Category, Product_category, sequelize, Variant } = require("../models");
+const { Product, Category, Product_category, sequelize, Variant, Product_gallery } = require("../models");
 
 class ProductController {
   static async create_product(req, res, next) {
@@ -88,7 +88,10 @@ class ProductController {
   static async get_all_product(req, res, next) {
     try {
       const products = await Product.findAll({
-        include: [{ model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } }],
+        include: [
+          { model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } },
+          { model: Product_gallery, attributes: { exclude: ["createdAt", "updatedAt"] } },
+        ],
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
 
