@@ -9,6 +9,8 @@ const category = require("./category");
 const sub_brand = require("./sub_brand");
 const brand = require("./brand");
 const variant = require("./variant");
+const banner = require("./banner");
+const discount = require("./discount");
 const product_gallery = require("./product_gallery");
 const auth = require("../middlewares/authentication");
 
@@ -21,6 +23,8 @@ router.use("/api/category", category);
 router.use("/api/brand", brand);
 router.use("/api/sub-brand", sub_brand);
 router.use("/api/variant", variant);
+router.use("/api/banner", banner);
+router.use("/api/discount", discount);
 router.use("/api/product-gallery", product_gallery);
 
 router.use(auth);
