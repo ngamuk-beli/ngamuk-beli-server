@@ -1,4 +1,6 @@
-const { Product, Category, Product_category, sequelize, Variant, Product_gallery, Banner_product, Banner } = require("../models");
+const { Product, Category, Product_category, sequelize, Variant, Product_gallery, Banner_product, Banner, Brand, Sub_brand } = require("../models");
+
+const { Op } = require("sequelize");
 
 class ProductController {
   static async create_product(req, res, next) {
@@ -119,13 +121,68 @@ class ProductController {
       next(err);
     }
   }
+
+  // Get All Product
   static async get_all_product(req, res, next) {
     try {
-      const products = await Product.findAll({
-        include: [
-          { model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } },
-          { model: Product_gallery, attributes: { exclude: ["createdAt", "updatedAt"] } },
-        ],
+      const {
+        q,
+        brand_id,
+        sub_brand_id
+      } = req.body
+
+      const where = {};
+
+      // search query
+      if (q) {
+        where[Op.or] = [
+          {
+            //search by name
+            name: {
+              [Op.iLike]: `%${q}%`
+            }
+          },
+          {
+            //search by description
+            description: {
+              [Op.iLike]: `%${q}%`
+            }
+          },
+          {
+            //search by brand title
+            "$Brand.title$": {
+              [Op.iLike]: `%${q}%`
+            }
+          },
+          {
+            //search by sub-brand title
+            "$Sub_brand.title$": {
+              [Op.iLike]: `%${q}%`
+            }
+          },
+        ]
+      }
+
+      // filter by brand
+      if (brand_id) {
+        where.brand_id = brand_id
+      }
+
+      // filter by sub_brand brand
+      if (sub_brand_id) {
+        where.sub_brand_id = sub_brand_id
+      }
+
+      const include = [
+        { model: Variant, attributes: { exclude: ["id", "createdAt", "updatedAt", "product_id"] } },
+        { model: Product_gallery, attributes: { exclude: ["createdAt", "updatedAt"] } },
+        { model: Brand, attributes: { exclude: ["id" ,"createdAt", "updatedAt"] } },
+        { model: Sub_brand, attributes: { exclude: ["id", "createdAt", "updatedAt", "brand_id"] } }
+      ]
+
+      const products = await Product.findAndCountAll({
+        where,
+        include,
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
 
