@@ -126,6 +126,8 @@ class ProductController {
   static async get_all_product(req, res, next) {
     try {
       const {
+        limit,
+        page,
         q,
         brand_id,
         sub_brand_id
@@ -180,13 +182,29 @@ class ProductController {
         { model: Sub_brand, attributes: { exclude: ["id", "createdAt", "updatedAt", "brand_id"] } }
       ]
 
+      const DEFAULT_PAGE = 1;
+      const DEFAULT_LIMIT = 20
+      
+      const currentPage = parseInt(page, 20) || DEFAULT_PAGE;
+      const itemsPerPage = parseInt(limit, 20) || DEFAULT_LIMIT;
+      const offset = (currentPage - 1) * itemsPerPage;;
+
       const products = await Product.findAndCountAll({
         where,
         include,
+        limit: itemsPerPage,
+        offset,
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
 
-      res.status(200).json(products);
+      const totalPages = Math.ceil(products.count / itemsPerPage);
+
+      res.status(200).json({
+        products,
+        currentPage,
+        totalPages,
+        totalItems: products.rows.length
+      });
     } catch (err) {
       next(err);
     }

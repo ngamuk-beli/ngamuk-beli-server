@@ -1,8 +1,11 @@
+const { Banner } = require("../models")
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    const getBanner = await Banner.findAll()
+
     await queryInterface.bulkInsert('Products', [
       {
           name: "Coyote 21",
@@ -13,6 +16,10 @@ module.exports = {
           quantity: 5,
           keyword: "shoes, running, run, health",
           weight: 1,
+          category: "Sneakers",
+          banner_id: getBanner[0],
+          brand_id: 1,
+          sub_brand_id: 1,
           createdAt: new Date(),
           updatedAt: new Date()
       },
